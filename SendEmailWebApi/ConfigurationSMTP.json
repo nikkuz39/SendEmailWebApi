@@ -1,0 +1,7 @@
+{
+  "FromAddress": "fromAddress@mail.com",
+  "Username": "userName@mail.com",
+  "Password": "password",
+  "Host": "smtp.gmail.com",
+  "Port": 25
+}

@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Send email</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+
+</head>
+<body>
+    <form name="mailForm" class="form-group">
+        <input type="hidden" name="id" value="0" />
+        <div class="form-group col-md-5">
+            <label for="subject">Subject</label>
+            <input class="form-control" name="subject" />
+        </div>
+
+        <div class="form-group col-md-5">
+            <label for="body">Body:</label>
+            <textarea class="form-control" name="body"></textarea>
+        </div>
+
+        <div class="form-group col-md-5">
+            <label for="recipients">Recipients:</label>
+            <input type="text" class="form-control" name="recipients" />
+        </div>
+
+        <div class="panel-body">
+            <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+    <script>
+        async function SendEmail(mailSubject, mailBody, mailRecipients) {
+
+            const response = await fetch("api/mails", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    subject: mailSubject,
+                    body: mailBody,
+                    recipients: mailRecipients
+                })
+            });
+
+            if (response.ok === true) {
+                const mail = await response.json();
+                reset();
+            }
+        }
+
+        function reset() {
+            const form = document.forms["mailForm"];
+            form.reset();
+            form.elements["id"].value = 0;
+        }
+
+        document.forms["mailForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["mailForm"];
+            const id = form.elements["id"].value;
+            const subject = form.elements["subject"].value;
+            const body = form.elements["body"].value;
+            const recipients = form.elements["recipients"].value;
+
+            if (id == 0 && recipients != "")
+                SendEmail(subject, body, recipients);
+        });
+    </script>
+</body>
+</html>

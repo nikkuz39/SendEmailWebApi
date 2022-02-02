@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SendEmailWebApi</name>
+    </assembly>
+    <members>
+        <member name="T:SendEmailWebApi.Controllers.MailsController">
+            <summary>
+            Контроллер для обработки входящих данных
+            </summary>
+        </member>
+        <member name="M:SendEmailWebApi.Controllers.MailsController.#ctor(Microsoft.Extensions.Options.IOptions{SendEmailWebApi.Models.SmtpConfig},SendEmailWebApi.Models.ApplicationContext,SendEmailWebApi.Models.ServiceSendMail)">
+            <summary>
+            Передача зависимостей в контроллер
+            </summary>
+            <param name="options">Строка подключения к сервису отправки email</param>
+            <param name="context">Контекст базы данных</param>
+            <param name="serviceSend">Сервис отправки email</param>
+        </member>
+        <member name="M:SendEmailWebApi.Controllers.MailsController.Get">
+            <summary>
+            При запросе /api/mails/ выводится список отправленных сообщений из баззы данных
+            </summary>
+            <returns>Выводит список в формате json</returns>
+        </member>
+        <member name="M:SendEmailWebApi.Controllers.MailsController.Post(SendEmailWebApi.Models.Mail)">
+            <summary>
+            Метод получает данные из формы, передает их в ServiceSendMail и сохраняет полученные данные в базе
+            </summary>
+            <param name="mail">Объект класса Mail</param>
+            <returns>Ок</returns>
+        </member>
+        <member name="T:SendEmailWebApi.Models.ApplicationContext">
+            <summary>
+            Для взаимодействия с базой данных, используем класс DbContext
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.ApplicationContext.Mails">
+            <summary>
+            DbSet представляет набор объектов, которые хранятся в базе данных и взаимодействует с классом
+            </summary>
+        </member>
+        <member name="M:SendEmailWebApi.Models.ApplicationContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            Устанавливаем параметры подключения к базе данных
+            </summary>
+            <param name="options">Строка подключения к базе данных</param>
+        </member>
+        <member name="T:SendEmailWebApi.Models.Mail">
+            <summary>
+            Данный класс содержит свойства, определяющие форму объекта - письмо
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.Id">
+            <summary>
+            Свойство хранит первичный ключ
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.Subject">
+            <summary>
+            Свойство хранит тему письма
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.Body">
+            <summary>
+            Свойство хранит текс письма
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.RecipientsList">
+            <summary>
+            Коллекция для хранения адресов получателей
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.Recipients">
+            <summary>
+            Свойство хранит адреса получателей
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.DateAndTime">
+            <summary>
+            Свойство хранит дату и время
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.Result">
+            <summary>
+            Свойство хранит результат отправки письма(отправлено, либо нет)
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.Mail.FailedMessage">
+            <summary>
+            Свойство хранит исключения возникающие при отправки письма
+            </summary>
+        </member>
+        <member name="T:SendEmailWebApi.Models.SmtpConfig">
+            <summary>
+            Данный класс содержит свойства для протокола SMTP
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.SmtpConfig.FromAddress">
+            <summary>
+            Свойство хранит адрес получателя 
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.SmtpConfig.Username">
+            <summary>
+            Свойство хранит имя пользователя
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.SmtpConfig.Password">
+            <summary>
+            Свойство хранит пароль
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.SmtpConfig.Host">
+            <summary>
+            Свойство хранит имя хоста
+            </summary>
+        </member>
+        <member name="P:SendEmailWebApi.Models.SmtpConfig.Port">
+            <summary>
+            Свойство хранит номер порта
+            </summary>
+        </member>
+        <member name="T:SendEmailWebApi.Models.ServiceSendMail">
+            <summary>
+            Данный класс проверяет адрес электронной почты получателя на соответствие,
+            формирует письмо и отправляет его на почту получателю
+            </summary>
+        </member>
+        <member name="M:SendEmailWebApi.Models.ServiceSendMail.SendEmailAsync(SendEmailWebApi.Models.Mail,SendEmailWebApi.Models.SmtpConfig)">
+            <summary>
+            Метод формирует письмо и отправляет его на почту получателю
+            </summary>
+            <param name="mail">Принимает объект класса Mail</param>
+            <param name="smtpConfig">Принимает объект класса SmtpConfig</param>
+            <returns></returns>
+        </member>
+        <member name="M:SendEmailWebApi.Models.ServiceSendMail.PatternEmail(SendEmailWebApi.Models.Mail)">
+            <summary>
+            Данный метод проверяет адрес электронной почты на соответствие 
+            </summary>
+            <param name="mail">Принимает объект класса Mail</param>
+            <returns>Возвращает список с адресами электронной почты </returns>
+        </member>
+        <member name="M:SendEmailWebApi.Startup.#ctor">
+            <summary>
+            Устанавливается источник конфигурационных настроек
+            </summary>
+        </member>
+        <member name="M:SendEmailWebApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ConfigureServices() регистрирует сервисы, которые используются приложением:
+            1. По данным конфигурации (ConfigurationSMTP.json) из свойства AppConfiguration создается объект Person;
+            2. Контекст подключения к базе данных;
+            3. Сервис отправки сообщения;
+            4. Чтобы задействовать контроллеры, вызывается метод services.AddControllers().
+            </summary>
+            <param name="services">Представляет коллекцию сервисов в приложении</param>
+        </member>
+    </members>
+</doc>
